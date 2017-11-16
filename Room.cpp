@@ -17,7 +17,7 @@ void printExits(){
 }
 //Print out a description of the room
 void printDescription(){
-        cout << description;
+     cout << "You are in a " << description;
         cout << endl;
 }
 //Constructor
@@ -45,7 +45,22 @@ void setExit(char* direction, Room* room){
      strcpy(newDirection, direction);
      Exits[newDirection] = room;
 }
-//Do all the stuff with items
-void addItem(Item*){
-
+//When the player drops an item into the room, it needs to add the item to the array
+void addItem(Item* item){
+     Item *newItem = new item();
+     newItem->name = item->name;
+     items.push_back(newItem);
 }
+//When the player takes an item from the room
+int takeItem(char* itemName){
+     for(int i = 0; i < items.size(); i++){
+          if(strcmp(items.at(i)->name, itemName) == 0){
+               delete items.at(i);
+               items.erase(items.begin()+i);
+               return 1;            
+          }
+     }
+     return 0;
+}
+
+//Create a function that can return what room an exit goes to

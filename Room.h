@@ -12,7 +12,7 @@ class Room{
           ~Room();
           void setExit(char*, Room*);
           void addItem(Item*);
-          void takeItem(char*);
+          int takeItem(char*);
      private:
           vector<Item*> items;
           map<char*, Room*> Exits;
