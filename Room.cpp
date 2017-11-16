@@ -13,6 +13,12 @@ void printExits(){
      for(it = Exits.begin(); it != Exits.end(); it++){
           cout << *(it->first) << " ";
      }
+     cout << endl;
+}
+//Print out a description of the room
+void printDescription(){
+        cout << description;
+        cout << endl;
 }
 //Constructor
 Room::Room(char* newDescription){
@@ -28,9 +34,10 @@ Room::~Room(){
 void printItems(){
      cout << "Items: ";
      for(vector<Item*>::iterator it = items.begin(); it != items.end(); it++){
-          //Get the char array as a part of item that contains the text.
-     
-     } 
+          //Get the char array as a part of item that contains the description and go ahead and print it out
+          cout << *(it->name) << " ";
+     }
+    cout << endl; 
 }
 //Sets the exit for the room
 void setExit(char* direction, Room* room){
@@ -39,3 +46,6 @@ void setExit(char* direction, Room* room){
      Exits[newDirection] = room;
 }
 //Do all the stuff with items
+void addItem(Item*){
+
+}
