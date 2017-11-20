@@ -4,6 +4,11 @@
 
 using namespace std;
 
+struct Item{
+	char* name;
+};
+
+
 class Room{
      public:
           void printExits();

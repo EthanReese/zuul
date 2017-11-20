@@ -14,13 +14,8 @@
 
 using namespace std;
 
-//Hold information about the items
-struct Item{
-     char* name;
 
-}
-
-void toLowerCase(char (&arr)[7]);
+void toLowerCase(char (&arr)[80]);
 
 int main(){
      //Welcome the user to the game
@@ -106,25 +101,25 @@ int main(){
      thirteen.setExit("south", fourteen);
      
      //Make some items to put down in the room
-     Item* torch = new item();
+     Item* torch = new Item();
      torch->name = "A Torch";
-     start.addItem(torch);
+     start->addItem(torch);
      delete torch;
-     Item* rKey = new item();
+     Item* rKey = new Item();
      rKey->name = "A Red Key";
-     nine.addItem(rKey);
+     nine->addItem(rKey);
      delete rKey;
-     Item* bKey = new item();
+     Item* bKey = new Item();
      bKey->name = "A Blue Key";
-     twelve.addItem(bKey);
+     twelve->addItem(bKey);
      delete bKey;
-     Item* gKey = new item();
+     Item* gKey = new Item();
      gKey->name = "A Gold Key";
-     six.add(gKey);
+     six->addItem(gKey);
      delete gKey;
-     Item* bKey = new item();
+     Item* bKey = new Item();
      bKey->name = "A Black Key";
-     ten.addItem(bKey);
+     ten->addItem(bKey);
      delete bKey;
 
      //Now save all the rooms to the necesary vector
@@ -149,14 +144,12 @@ int main(){
 
      //Main game loop
      while(true){
-          char[80] input;
-          cin << input;
+          char input[80];
+          cin >> input;
           toLowerCase(input);
           //If they want to move to another room
           if(strcmp(input, "go") == 0){
-               cout << "Please enter which exit you'd like to take"
-
-
+               cout << "Please enter which exit you'd like to take";
           }
           //If they want to pick up an object thats in the room
           else if(strcmp(input, "take") == 0){
