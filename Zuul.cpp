@@ -41,7 +41,7 @@ int main(){
      //Create all of the rooms
      char* startc = "barren room with a torch on the wall.";
      Room* start = new Room(startc);
-     char* onec = "junction in the dungeon. There is a black door to the West. You might need a key.";
+     char* onec = "junction in the dungeon. There is a black door to the east. You might need a key.";
      Room* one = new Room(onec);
      char* twoc = "junction in the dungeon. You see nothing.";
      Room* two = new Room(twoc);
@@ -49,13 +49,13 @@ int main(){
      Room* four = new Room(twoc);
      char* fourBc = "junction in the dungeon. There is a red door to the South. You might need a key.";
      Room* fourB = new Room(fourBc);
-     char* fivec = "junction in the dungeon. There is a blue door to the South. You might need a key.";
+     char* fivec = "junction in the dungeon. There is a blue door to the South. You might need a key";
      Room* five = new Room(fivec);
      Room* six = new Room(twoc);
      char* sevenc = "junction in the dungeon. There is a gold door to the North. You might need a key.";
      Room* seven = new Room(sevenc);
      Room* eight = new Room(twoc);
-     char* ninec = "end of the dungeon, but you see a faint light coming a small corner in the west.";
+     char* ninec = "end of the dungeon, but you see a faint light coming a small corner in the east.";
      Room* nine = new Room(ninec);
      char* tenc = "end of this path. You should turn back.";
      Room* ten = new Room(tenc);
@@ -102,13 +102,13 @@ int main(){
      ten->setExit("north", fourB);
      eleven->setExit("west", one);
      eleven->setExit("north", twelve);
-     twelve->setExit("south", eleven);
+     twelve->setExit("north", eleven);
      thirteen->setExit("north", five);
      thirteen->setExit("south", fourteen);
      
      //Make some items to put down in the room
      Item* torch = new Item();
-     torch->name = "A Torch";
+     torch->name = "Torch";
      start->addItem(torch);
      delete torch;
      Item* rKey = new Item();
@@ -147,20 +147,21 @@ int main(){
      rooms.push_back(fourteen);
      rooms.push_back(fifteen);
 
-
+     currentRoom = start;
      //Main game loop
-     bool checker = true;
-     while(checker){
+     while(true){
+          cout << "> ";
           char input[80];
           cin >> input;
           toLowerCase(input);
           //If they want to move to another room
           if(strcmp(input, "go") == 0){
-               cout << "Please enter which exit you'd like to take";
+               cout << "Please enter which exit you'd like to take: ";
                char dInput[80];
                cin >> dInput;
                toLowerCase(dInput);
                        currentRoom  = currentRoom->getExit(dInput);
+                       cout << endl;
                        currentRoom->printDescription();
                        currentRoom->printItems();
                        currentRoom->printExits();
@@ -170,11 +171,10 @@ int main(){
           }
           //If they want to pick up an object thats in the room
           else if(strcmp(input, "take") == 0){
-               cout << "Which item would you like to take?";
+               cout << "Which item would you like to take?"<< endl;
                char dInput[80];
                cin.ignore();
                cin.getline(dInput, 80);
-               cin.ignore();
                //check to make sure the item is in the room
                if(currentRoom->takeItem(dInput) == 1){
                     Item *item = new Item();
@@ -183,7 +183,7 @@ int main(){
                     checkItemConditions(item, rooms);
                }
                else{
-                       cout << "That item isn't in this room";
+                       cout << "That item isn't in this room" << endl;
                }
           }
           //If they want to drop an object that is in the room
@@ -192,7 +192,6 @@ int main(){
                char dInput[80];
                cin.ignore();
                cin.getline(dInput, 80);
-               cin.ignore();
                //check if that item is in their inventory
                for(int i = 0; i < items.size(); i++){     
                   if(strcmp(items.at(i)->name, dInput) == 0){
@@ -222,7 +221,7 @@ int main(){
                cout << "Good luck!" << endl;
           }
           //The person wants to quit
-          else if(strcmp(input, "quit")){
+          else if(strcmp(input, "quit") == 0){
                   return 1;
           }
           //The input is invalid
@@ -272,53 +271,59 @@ void checkItemConditions(Item* item, vector<Room*> rooms){
           //Find room four B and make an exit to room 10 bc the door opened.
           for(int i = 0; i < rooms.size(); i++){
                if(strcmp(rooms.at(i)->getDescription(),"junction in the dungeon. There is a red door to the South. You might need a key.") == 0){
-                    rooms.at(i)->setExit("south", rooms.at(rmTenInd));
+                   // cout << "One" << endl;
+                       rooms.at(i)->setExit("south", rooms.at(rmTenInd));
                }
           }
      }
-     else if(strcmp(item->name, "Blue Key")){
+     else if(strcmp(item->name, "Blue Key")== 0){
              //Find index of room 5 
           int rmTenInd = 0;
           for(int i = 0; i< rooms.size(); i++){
-               if(strcmp(rooms.at(i)->getDescription(), "in the middle of a hallway. You see some light coming from the South.") == 0){
+               if(strcmp(rooms.at(i)->getDescription(), "in the middle of a hallway. You see some light coming from the South") == 0){
                     rmTenInd = i;
                }
           }
           //Find room four B and make an exit to room 10 bc the door opened.
           for(int i = 0; i < rooms.size(); i++){ 
-               if(strcmp(rooms.at(i)->getDescription(),"junction in the dungeon. There is a blue door to the South. You might need a key.") == 0){
+               if(strcmp(rooms.at(i)->getDescription(),"junction in the dungeon. There is a blue door to the South. You might need a key") == 0){
+                    cout << "one" << endl;
                     rooms.at(i)->setExit("south", rooms.at(rmTenInd));
                }
           }
      }
-     else if(strcmp(item->name, "Black Key")){ 
+     else if(strcmp(item->name, "Black Key") == 0){ 
              //Find index of room 5 
           int rmTenInd = 0;
-          for(int i = 9; i< rooms.size(); i++){
+          for(int i = 11; i< rooms.size(); i++){
                if(strcmp(rooms.at(i)->getDescription(),"junction in the dungeon. You see nothing.") == 0){
                     rmTenInd = i;
+                    break;
                }
           }
           //Find room four B and make an exit to room 10 bc the door opened.
           for(int i = 0; i < rooms.size(); i++){ 
                if(strcmp(rooms.at(i)->getDescription(),"junction in the dungeon. There is a black door to the West. You might need a key.") == 0){
-                    rooms.at(i)->setExit("west", rooms.at(rmTenInd));
+                    rooms.at(i)->setExit("east", rooms.at(rmTenInd));
                }
           }
 
      }
-     else if(strcmp(item->name, "Gold Key")){
+     else if(strcmp(item->name, "Gold Key") == 0){
              //Find index of room 8 
           int rmTenInd = 0;
-          for(int i = 6; i< rooms.size(); i++){
+          for(int i = 8; i< rooms.size(); i++){
                if(strcmp(rooms.at(i)->getDescription(), "junction in the dungeon. You see nothing.") == 0){
                     rmTenInd = i;
+                    //cout << "one" << endl;
+                    break;
                }
           }
           //Find room four B and make an exit to room 10 bc the door opened.
-          for(int i = 0; i < rooms.size(); i++){ 
-               if(strcmp(rooms.at(i)->getDescription(),"junction in the dungeon. There is a gold door to the North. You might need a key.") == 0){
-                    rooms.at(i)->setExit("north", rooms.at(rmTenInd));
+          for(int i = 0; i < rooms.size(); i++){
+               if(strcmp(rooms.at(i)->getDescription(),"junction in the dungeon. There is a gold door to the North. You might need a key") == 0){
+                    //cout << "Made it here" << endl;
+                       rooms.at(i)->setExit("north", rooms.at(rmTenInd));
                }
           }
      }

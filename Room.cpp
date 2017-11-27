@@ -18,14 +18,14 @@ void Room::printExits(){
      //Iterate over the map and find all the exits that exist and go ahead and print them out
      map<char*, Room*>::iterator it;
      for(it = Exits.begin(); it != Exits.end(); it++){
-          cout << *(it->first) << " ";
+          cout << (it->first) << " ";
      }
      cout << endl;
 }
 //Print out a description of the room
 void Room::printDescription(){
-     cout << "You are in a " << description;
-        cout << endl;
+     cout << "You are in a "; 
+     cout << description << endl;
 }
 //Deconstructor
 Room::~Room(){
