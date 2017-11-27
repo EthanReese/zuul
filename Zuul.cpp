@@ -14,13 +14,10 @@
 
 using namespace std;
 
-//Hold information about the items
-struct Item{
-     char* name;
 
-}
-
-void toLowerCase(char (&arr)[7]);
+void toLowerCase(char (&arr)[80]);
+int checkWinConditions(Room*);
+void checkItemConditions(Item*, vector<Room*>);
 
 int main(){
      //Welcome the user to the game
@@ -31,6 +28,8 @@ int main(){
     vector<Item*> items;
    //Create a list of rooms
    vector<Room*> rooms;
+   //Keep track of what the current room is
+   Room* currentRoom;
   //Make a variable that can keep track of the index of the room
   int index = 0; 
      
@@ -40,91 +39,93 @@ int main(){
 
 
      //Create all of the rooms
-     char* start = "barren room with a torch on the wall."
-     Room* start = new Room(start);
-     char* one = "junction in the dungeon. There is a black door to the West. You might need a key.";
-     Room* one = new Room(one);
-     char* two = "junction in the dungeon. You see nothing.";
-     Room* two = new Room(two);
-     Room* three = new Room(two);
-     Room* four = new Room(two);
-     char* fourB = "junction in the dungeon. There is a red door to the South. You might need a key.";
-     Room* fourB = new Room(fourB);
-     char* five = "junction in the dungeon. There is a blue door to the South. You might need a key.";
-     Room* five = new Room(five);
-     Room* six = new Room(two);
-     char* seven = "junction in the dungeon. There is a gold door to the North. You might need a key.";
-     Room* seven = new Room(seven);
-     Room* eight = new Room(two);
-     char* nine = "end of the dungeon, but you see a faint light coming a small corner in the west.";
-     Room* nine = new Room(nine);
-     char* ten = "end of this path. You should turn back.";
-     Room* ten = new Room(ten);
-     Room* eleven = new Room(two);
-     Room* twelve = new Room(ten);
-     char* thirteen = "in the middle of a hallway. You see some light coming from the South.";
-     Room* thirteen = new Room(thirteen);
-     char* fourteen = "a giant grassy field and your house in the distance.";
-     Room* fourteen = new Room(fourteen);
-     char* fifteen = "a room filled all the way with lava.";
-     Room* fifteen = new Room(fifteen);
+     char* startc = "barren room with a torch on the wall.";
+     Room* start = new Room(startc);
+     char* onec = "junction in the dungeon. There is a black door to the West. You might need a key.";
+     Room* one = new Room(onec);
+     char* twoc = "junction in the dungeon. You see nothing.";
+     Room* two = new Room(twoc);
+     Room* three = new Room(twoc);
+     Room* four = new Room(twoc);
+     char* fourBc = "junction in the dungeon. There is a red door to the South. You might need a key.";
+     Room* fourB = new Room(fourBc);
+     char* fivec = "junction in the dungeon. There is a blue door to the South. You might need a key.";
+     Room* five = new Room(fivec);
+     Room* six = new Room(twoc);
+     char* sevenc = "junction in the dungeon. There is a gold door to the North. You might need a key.";
+     Room* seven = new Room(sevenc);
+     Room* eight = new Room(twoc);
+     char* ninec = "end of the dungeon, but you see a faint light coming a small corner in the west.";
+     Room* nine = new Room(ninec);
+     char* tenc = "end of this path. You should turn back.";
+     Room* ten = new Room(tenc);
+     Room* eleven = new Room(twoc);
+     Room* twelve = new Room(tenc);
+     char* thirteenc = "in the middle of a hallway. You see some light coming from the South.";
+     Room* thirteen = new Room(thirteenc);
+     char* fourteenc = "a opening.";
+     Room* fourteen = new Room(fourteenc);
+     char* fifteenc = "a lava room.";
+     Room* fifteen = new Room(fifteenc);
+     
+     //TODO: Delete all of the char arrays
 
      //Set the exits for all the rooms
-     start.setExit("west", three);
-     start.setExit("east", one);
-     start.setExit("north", two);
-     start.setExit("south", four);
-     one.setExit("north", six);
-     one.setExit("south", five);
-     one.setExit("west", start);
-     two.setExit("east", six);
-     two.setExit("west", seven);
-     two.setExit("south", start);
-     three.setExit("east", start);
-     three.setExit("north", seven);
-     three.setExit("south", fourB);
-     four.setExit("north", start);
-     four.setExit("east", five);
-     four.setExit("west", fourB);
-     fourB.setExit("north", three);
-     fourB.setExit("west", four);
-     five.setExit("north", one);
-     five.setExit("west", four);
-     six.setExit("west", two);
-     six.setExit("south", one);
-     seven.setExit("south", three);
-     seven.setExit("east", two);
-     eight.setExit("south", seven);
-     eight.setExit("east", nine);
-     nine.setExit("west", eight);
-     nine.setExit("east", fifteen);
-     ten.setExit("north", fourB);
-     eleven.setExit("west", one);
-     eleven.setExit("north", twelve);
-     twelve.setExit("south", eleven);
-     thirteen.setExit("north", five);
-     thirteen.setExit("south", fourteen);
+     start->setExit("west", three);
+     start->setExit("east", one);
+     start->setExit("north", two);
+     start->setExit("south", four);
+     one->setExit("north", six);
+     one->setExit("south", five);
+     one->setExit("west", start);
+     two->setExit("east", six);
+     two->setExit("west", seven);
+     two->setExit("south", start);
+     three->setExit("east", start);
+     three->setExit("north", seven);
+     three->setExit("south", fourB);
+     four->setExit("north", start);
+     four->setExit("east", five);
+     four->setExit("west", fourB);
+     fourB->setExit("north", three);
+     fourB->setExit("west", four);
+     five->setExit("north", one);
+     five->setExit("west", four);
+     six->setExit("west", two);
+     six->setExit("south", one);
+     seven->setExit("south", three);
+     seven->setExit("east", two);
+     eight->setExit("south", seven);
+     eight->setExit("east", nine);
+     nine->setExit("west", eight);
+     nine->setExit("east", fifteen);
+     ten->setExit("north", fourB);
+     eleven->setExit("west", one);
+     eleven->setExit("north", twelve);
+     twelve->setExit("south", eleven);
+     thirteen->setExit("north", five);
+     thirteen->setExit("south", fourteen);
      
      //Make some items to put down in the room
-     Item* torch = new item();
+     Item* torch = new Item();
      torch->name = "A Torch";
-     start.addItem(torch);
+     start->addItem(torch);
      delete torch;
-     Item* rKey = new item();
-     rKey->name = "A Red Key";
-     nine.addItem(rKey);
+     Item* rKey = new Item();
+     rKey->name = "Red Key";
+     nine->addItem(rKey);
      delete rKey;
-     Item* bKey = new item();
-     bKey->name = "A Blue Key";
-     twelve.addItem(bKey);
+     Item* bKey = new Item();
+     bKey->name = "Blue Key";
+     twelve->addItem(bKey);
      delete bKey;
-     Item* gKey = new item();
-     gKey->name = "A Gold Key";
-     six.add(gKey);
+     Item* gKey = new Item();
+     gKey->name = "Gold Key";
+     six->addItem(gKey);
      delete gKey;
-     Item* bKey = new item();
-     bKey->name = "A Black Key";
-     ten.addItem(bKey);
+     Item* blKey = new Item();
+     blKey->name = "Black Key";
+     ten->addItem(blKey);
      delete bKey;
 
      //Now save all the rooms to the necesary vector
@@ -148,32 +149,76 @@ int main(){
 
 
      //Main game loop
-     while(true){
-          char[80] input;
-          cin << input;
+     bool checker = true;
+     while(checker){
+          char input[80];
+          cin >> input;
           toLowerCase(input);
           //If they want to move to another room
           if(strcmp(input, "go") == 0){
-               cout << "Please enter which exit you'd like to take"
-
-
+               cout << "Please enter which exit you'd like to take";
+               char dInput[80];
+               cin >> dInput;
+               toLowerCase(dInput);
+                       currentRoom  = currentRoom->getExit(dInput);
+                       currentRoom->printDescription();
+                       currentRoom->printItems();
+                       currentRoom->printExits();
+                       if(checkWinConditions(currentRoom) == 1){
+                               return 0;
+                         }
           }
           //If they want to pick up an object thats in the room
           else if(strcmp(input, "take") == 0){
-
+               cout << "Which item would you like to take?";
+               char dInput[80];
+               cin.ignore();
+               cin.getline(dInput, 80);
+               cin.ignore();
+               //check to make sure the item is in the room
+               if(currentRoom->takeItem(dInput) == 1){
+                    Item *item = new Item();
+                    item->name = dInput;
+                    items.push_back(item);
+                    checkItemConditions(item, rooms);
+               }
+               else{
+                       cout << "That item isn't in this room";
+               }
           }
           //If they want to drop an object that is in the room
           else if(strcmp(input, "drop") == 0){
-
+               cout << "Which item would you like to drop?";
+               char dInput[80];
+               cin.ignore();
+               cin.getline(dInput, 80);
+               cin.ignore();
+               //check if that item is in their inventory
+               for(int i = 0; i < items.size(); i++){     
+                  if(strcmp(items.at(i)->name, dInput) == 0){
+                         //Add the item back into the room
+                          currentRoom->addItem(items.at(i));
+                          items.erase(items.begin()+i);
+                    }
+               }
           }
           //The person wants to list out the items in their inventory
           else if(strcmp(input, "inventory") == 0){
-
+               //Loop through the inventory and print out every item
+               cout << "You have: " << endl;
+               for(int i = 0; i < items.size(); i++){
+                    cout << items.at(i)->name << endl;
+               }
+          }
+          else if(strcmp(input, "look") == 0){
+               currentRoom->printDescription();
+               currentRoom->printItems();
+               currentRoom->printExits();
           }
           //The person needs some help
           else if(strcmp(input, "help") == 0){
                cout << "You are playing a dungeon adventure game. You have to try to get out of the dungeon." << endl;
-               cout << "Your command words are go, help, inventory, quit, and take. Once you enter a command word you may be prompted for further input" << endl;
+               cout << "Your command words are go, look, help, inventory, quit, and take. Once you enter a command word you may be prompted for further input" << endl;
                cout << "Good luck!" << endl;
           }
           //The person wants to quit
@@ -184,11 +229,6 @@ int main(){
           else{
                   cout << "Please enter one of the command words by itself. If there is further input required, you will be prompted." << endl;
           }
-
-
-          //Print out a description of the room
-          //Print out exits
-          //Print out items
 
      }
 
@@ -201,4 +241,85 @@ void toLowerCase(char (&arr)[80]){
         for(int i = 0; i < 80; i++){
           arr[i] = tolower(arr[i]);
         }
+}
+//Function to check the winning and losing conditions
+int checkWinConditions(Room* room){
+     //Check if the room that they're in is the win condition
+     if(strcmp(room->getDescription(),"a opening.") == 0){
+          cout << "You step into a large grassy field." << endl;
+          cout << "You can see your house in the distance." << endl;
+          cout << "Congratulations! You Win!";
+          return 1;
+     }
+     else if(strcmp(room->getDescription(),"a lava room.") == 0){
+          cout << "You Die." << endl;
+          cout << "You managed to lose one of the easiest games in existence. Nice job!" << endl;
+          return 1;
+     }
+     return 0;
+
+}
+//Function to check if the items that the user picks up do anything
+void checkItemConditions(Item* item, vector<Room*> rooms){
+     if(strcmp(item->name, "Red Key") == 0){
+          //Find room 10 in the array so I can set that in the exit
+          int rmTenInd = 0;
+          for(int i = 0; i< rooms.size(); i++){
+               if(strcmp(rooms.at(i)->getDescription(), "end of this path. You should turn back.") == 0){
+                    rmTenInd = i;
+               }
+          }
+          //Find room four B and make an exit to room 10 bc the door opened.
+          for(int i = 0; i < rooms.size(); i++){
+               if(strcmp(rooms.at(i)->getDescription(),"junction in the dungeon. There is a red door to the South. You might need a key.") == 0){
+                    rooms.at(i)->setExit("south", rooms.at(rmTenInd));
+               }
+          }
+     }
+     else if(strcmp(item->name, "Blue Key")){
+             //Find index of room 5 
+          int rmTenInd = 0;
+          for(int i = 0; i< rooms.size(); i++){
+               if(strcmp(rooms.at(i)->getDescription(), "in the middle of a hallway. You see some light coming from the South.") == 0){
+                    rmTenInd = i;
+               }
+          }
+          //Find room four B and make an exit to room 10 bc the door opened.
+          for(int i = 0; i < rooms.size(); i++){ 
+               if(strcmp(rooms.at(i)->getDescription(),"junction in the dungeon. There is a blue door to the South. You might need a key.") == 0){
+                    rooms.at(i)->setExit("south", rooms.at(rmTenInd));
+               }
+          }
+     }
+     else if(strcmp(item->name, "Black Key")){ 
+             //Find index of room 5 
+          int rmTenInd = 0;
+          for(int i = 9; i< rooms.size(); i++){
+               if(strcmp(rooms.at(i)->getDescription(),"junction in the dungeon. You see nothing.") == 0){
+                    rmTenInd = i;
+               }
+          }
+          //Find room four B and make an exit to room 10 bc the door opened.
+          for(int i = 0; i < rooms.size(); i++){ 
+               if(strcmp(rooms.at(i)->getDescription(),"junction in the dungeon. There is a black door to the West. You might need a key.") == 0){
+                    rooms.at(i)->setExit("west", rooms.at(rmTenInd));
+               }
+          }
+
+     }
+     else if(strcmp(item->name, "Gold Key")){
+             //Find index of room 8 
+          int rmTenInd = 0;
+          for(int i = 6; i< rooms.size(); i++){
+               if(strcmp(rooms.at(i)->getDescription(), "junction in the dungeon. You see nothing.") == 0){
+                    rmTenInd = i;
+               }
+          }
+          //Find room four B and make an exit to room 10 bc the door opened.
+          for(int i = 0; i < rooms.size(); i++){ 
+               if(strcmp(rooms.at(i)->getDescription(),"junction in the dungeon. There is a gold door to the North. You might need a key.") == 0){
+                    rooms.at(i)->setExit("north", rooms.at(rmTenInd));
+               }
+          }
+     }
 }

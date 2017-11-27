@@ -4,6 +4,10 @@
 
 using namespace std;
 
+struct Item{
+        char* name;
+};
+
 class Room{
      public:
           void printExits();
@@ -13,8 +17,11 @@ class Room{
           void setExit(char*, Room*);
           void addItem(Item*);
           int takeItem(char*);
-     private:
+          Room* getExit(char*);
           vector<Item*> items;
           map<char*, Room*> Exits;
-          char* description; 
+          char* description;
+          char* getDescription();
+          void printDescription();
+     private:
      };
