@@ -67,8 +67,8 @@ int Room::isItem(char* itemName){
 //Create a function that can return what room an exit goes to
 Room* Room::getExit(char* exit){
      Room* returnRoom = NULL;
-     for (auto &i : Exits){
-          if(strcmp(i.first, exit) == 0){
+     for (auto &it : Exits){
+          if(strcmp(it.first, exit) == 0){
                returnRoom = i.second;
                break;
           }
