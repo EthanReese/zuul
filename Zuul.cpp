@@ -21,7 +21,7 @@ void checkItemConditions(Item*, vector<Room*>);
 
 int main(){
      //Welcome the user to the game
-     cout << "Welcome to the game of zuul. Your command words are 'take' 'go' 'drop' 'inventory' 'quit' and 'help'"<< endl;
+     cout << "Welcome to the game of zuul. Your command words are 'take' 'go' 'drop' 'inventory' 'look' 'quit' and 'help'"<< endl;
      cout << "You slowly open your eyes and realize you are in a dungeon room with a torch attached to the wall." << endl;
      cout << "You have nothing with you and you have no idea where you are." << endl;
     //Create an inventory to hold players items
@@ -88,7 +88,7 @@ int main(){
      four->setExit("east", five);
      four->setExit("west", fourB);
      fourB->setExit("north", three);
-     fourB->setExit("west", four);
+     fourB->setExit("east", four);
      five->setExit("north", one);
      five->setExit("west", four);
      six->setExit("west", two);
@@ -102,7 +102,7 @@ int main(){
      ten->setExit("north", fourB);
      eleven->setExit("west", one);
      eleven->setExit("north", twelve);
-     twelve->setExit("north", eleven);
+     twelve->setExit("south", eleven);
      thirteen->setExit("north", five);
      thirteen->setExit("south", fourteen);
      
@@ -126,7 +126,7 @@ int main(){
      Item* blKey = new Item();
      blKey->name = "Black Key";
      ten->addItem(blKey);
-     delete bKey;
+     delete blKey;
 
      //Now save all the rooms to the necesary vector
      rooms.push_back(start);
@@ -160,7 +160,8 @@ int main(){
                char dInput[80];
                cin >> dInput;
                toLowerCase(dInput);
-                       currentRoom  = currentRoom->getExit(dInput);
+               if(currentRoom->getExit(dInput) != NULL){
+                    currentRoom  = currentRoom->getExit(dInput);
                        cout << endl;
                        currentRoom->printDescription();
                        currentRoom->printItems();
@@ -168,6 +169,10 @@ int main(){
                        if(checkWinConditions(currentRoom) == 1){
                                return 0;
                          }
+                    }
+               else{
+                       cout << "Your exit was an invalid input. Please try again.";
+               }
           }
           //If they want to pick up an object thats in the room
           else if(strcmp(input, "take") == 0){
@@ -176,10 +181,12 @@ int main(){
                cin.ignore();
                cin.getline(dInput, 80);
                //check to make sure the item is in the room
-               if(currentRoom->takeItem(dInput) == 1){
-                    Item *item = new Item();
-                    item->name = dInput;
+               if(currentRoom->isItem(dInput) == 1){
+                    //cout << items.at(0)->name;
+                    //cout << items.at(0)->name;
+                    Item* item = currentRoom->takeItem(dInput);
                     items.push_back(item);
+                    //cout << items.at(0)->name;
                     checkItemConditions(item, rooms);
                }
                else{
@@ -205,6 +212,7 @@ int main(){
           else if(strcmp(input, "inventory") == 0){
                //Loop through the inventory and print out every item
                cout << "You have: " << endl;
+               //cout << items.at(0)->name << endl;
                for(int i = 0; i < items.size(); i++){
                     cout << items.at(i)->name << endl;
                }
@@ -263,7 +271,7 @@ void checkItemConditions(Item* item, vector<Room*> rooms){
      if(strcmp(item->name, "Red Key") == 0){
           //Find room 10 in the array so I can set that in the exit
           int rmTenInd = 0;
-          for(int i = 0; i< rooms.size(); i++){
+          for(int i = 9; i< rooms.size(); i++){
                if(strcmp(rooms.at(i)->getDescription(), "end of this path. You should turn back.") == 0){
                     rmTenInd = i;
                }

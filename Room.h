@@ -10,13 +10,14 @@ struct Item{
 
 class Room{
      public:
+          Item* takeItem(char*);
           void printExits();
           void printItems();
           Room(char*);
           ~Room();
           void setExit(char*, Room*);
           void addItem(Item*);
-          int takeItem(char*);
+          int isItem(char*);
           Room* getExit(char*);
           vector<Item*> items;
           map<char*, Room*> Exits;

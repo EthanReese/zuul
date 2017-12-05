@@ -30,7 +30,7 @@ void Room::printDescription(){
 //Deconstructor
 Room::~Room(){
      delete description;
-    //Am I going to have to delete the char pointers in the map? 
+     
 }
 //Print out all of the items in the room
 void Room::printItems(){
@@ -54,11 +54,9 @@ void Room::addItem(Item* item){
      items.push_back(newItem);
 }
 //When the player takes an item from the room
-int Room::takeItem(char* itemName){
+int Room::isItem(char* itemName){
      for(int i = 0; i < items.size(); i++){
           if(strcmp(items.at(i)->name, itemName) == 0){
-               delete items.at(i);
-               items.erase(items.begin()+i);
                return 1;            
           }
      }
@@ -67,7 +65,7 @@ int Room::takeItem(char* itemName){
 
 //Create a function that can return what room an exit goes to
 Room* Room::getExit(char* exit){
-     Room* returnRoom;
+     Room* returnRoom = NULL;
      for (auto &i : Exits){
           if(strcmp(i.first, exit) == 0){
                returnRoom = i.second;
@@ -79,4 +77,14 @@ Room* Room::getExit(char* exit){
 //Function that returns the description of a room
 char* Room::getDescription(){
      return description;
+}
+//Function that can actually take an item from the room
+Item* Room::takeItem(char* itemName){     
+     for(int i = 0; i < items.size(); i++){
+          if(strcmp(items.at(i)->name, itemName) == 0){
+               Item* returnItem = items.at(i);
+               items.erase(items.begin()+i);
+               return returnItem;            
+          }
+     }
 }
