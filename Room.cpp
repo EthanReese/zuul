@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <vector>
+#include <cstring>
 #include "Room.h"
 
 using namespace std;
